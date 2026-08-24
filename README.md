@@ -1,438 +1,259 @@
-# AAMAD – AI-Assisted Multi-Agent Application Development Framework
+# Multi-Agent Customer Onboarding Crew
 
-**AAMAD** is an open, production-grade framework for building, deploying, and evolving multi-agent applications using best context engineering practices.  
-It systematizes research-driven planning, modular AI agent workflows, and rapid MVP/devops pipelines for enterprise-ready AI solutions.
+> An AI agent crew that greets new B2B SaaS customers after signup, personalizes their first-week plan, guides them through first use in-app, and escalates to a human with full context when it cannot help.
+
+[![Status: Phase 1 Define complete](https://img.shields.io/badge/status-Phase%201%20Define%20complete-blue)]()
+[![Runtime: crewai](https://img.shields.io/badge/runtime-crewai-orange)]()
+[![Type: Internal capstone MVP](https://img.shields.io/badge/type-internal%20capstone-lightgrey)]()
 
 ---
 
 ## Table of Contents
 
-- [What is AAMAD?](#what-is-aamad)
-- [What AAMAD is not](#what-aamad-is-not)
-- [Principles and benefits](#principles-and-benefits)
-- [Core Concepts](#core-concepts)
-- [AAMAD phases at a glance](#aamad-phases-at-a-glance)
-- [Installation](#installation)
-- [Using AAMAD in your IDE](#using-aamad-in-your-ide)
-- [Repository Structure](#repository-structure)
-- [Runtime adapters](#runtime-adapters)
-- [How to Use the Framework](#how-to-use-the-framework)
-- [Phase 1: Define Workflow (Product Manager)](#phase-1-define-stage-product-manager)
-- [Phase 2: Build Workflow (Multi-Agent)](#phase-2-build-stage-multi-agent)
-- [Phase 3: Deliver Stage (DevOps)](#phase-3-deliver-stage-devops)
-- [Contributing](#contributing)
-- [License](#license)
+- [Project overview](#project-overview)
+- [Problem statement and value proposition](#problem-statement-and-value-proposition)
+- [Key features](#key-features)
+- [Application architecture overview](#application-architecture-overview)
+- [Getting started](#getting-started)
+- [Project structure](#project-structure)
+- [Next steps for contributors](#next-steps-for-contributors)
+- [Open questions](#open-questions)
+- [Sources](#sources)
+- [Assumptions](#assumptions)
+- [Audit](#audit)
 
 ---
 
-## What is AAMAD?
+## Project overview
 
-AAMAD is a context engineering framework based on best practices in AI-assisted coding and multi-agent system development methodologies.  
-It enables teams to:
-
-- Launch projects with autonomous or collaborative AI agents
-- Rapidly prototype MVPs with clear context boundaries
-- Use production-ready architecture/design patterns
-- Accelerate delivery, reduce manual overhead, and enable continuous iteration
-
-In AAMAD, the development crew (personas, rules, templates, and artifacts) is the stable methodology.  
-Runtime adapters are an implementation choice for what backend runtime your generated MVP targets.
-
-You can use AAMAD across multiple development environments: see [Using AAMAD in your IDE](#using-aamad-in-your-ide) for Cursor, Claude Code, and VS Code + GitHub Copilot.
+- **Project name:** Multi-Agent Customer Onboarding Crew
+- **Tagline:** From signup to first successful use — an AI crew that never loses context.
+- **Status:** Phase 1 **Define complete** (PRD authored). Phase 2 **Build not started** — SAD (`@system.arch`), Setup (`@project.mgr`), Frontend (`@frontend.eng`), Backend (`@backend.eng`), Integration (`@integration.eng`), QA (`@qa.eng`), and Security (`@security.eng`) artifacts are pending. No application code exists yet.
+- **Target runtime:** `crewai` (resolved from `aamad.config.example.yml` `runtime.target`; `AAMAD_TARGET_RUNTIME` environment variable not set — see [Assumptions](#assumptions)).
+- **Nature:** Internal-facing capstone MVP built with the **AAMAD** (AI-Assisted Multi-Agent Application Development) framework. No commercial market case; MRD intentionally skipped (see PRD Input Requirements).
 
 ---
 
-## What AAMAD is not
+## Problem statement and value proposition
 
-- AAMAD is not a programmatic runtime orchestrator for its own Define → Build → Deliver phases.
-- Runtime adapter selection does not change AAMAD phase orchestration; it only changes the runtime conventions used by Build-phase implementation personas.
-- Headless orchestration of AAMAD phases remains out of scope (see current release notes / changelog).
+Summarized from PRD §1 (Executive Summary). All quantitative baselines below are **assumed placeholders** pending real product analytics — see PRD Assumptions.
 
----
+**Problem (baseline assumed)**
 
-## Principles and benefits
+- New B2B SaaS customers land in the product after signup with no guided path; they read scattered docs, guess at setup, and open support tickets for questions the docs already answer.
+- Time-to-first-successful-use: **14–21 days**.
+- ~**40%** of first-30-day support tickets are repeat onboarding questions.
+- ~**40%** of new signups never complete initial setup.
 
-AAMAD changes “vibe coding” from ad-hoc prompting into a **context-first, persona-driven** workflow:
+**Value proposition**
 
-- **Single-responsibility personas** own clear epics (Define → Build → Deliver) with explicit inputs, outputs, and prohibited actions.
-- **Artifacts over chat memory:** PRD, SAD, and phase docs under `project-context/` make decisions auditable and reproducible.
-- **Runtime adapters are an implementation choice** (`AAMAD_TARGET_RUNTIME`), not the methodology itself.
-- **Quality gates** (required headings, optional `aamad validate`, QA → security → deliver) keep MVP scope honest.
+- A 5-agent crew covering the full onboarding arc — **welcome & qualify → sponsor brief → personalized plan → guided first use → escalate with context** — keeps every job auditable and every prompt small (PRD §1).
+- Expected outcomes (PRD §1 / §7): time-to-first-value **≤ 5 days**, setup completion **≥ 80%**, onboarding-related support tickets **−50%**.
+- Onboarding capacity becomes independent of headcount; support shifts from repetitive Q&A to complex cases (PRD §1).
 
-**Benefits you can expect:** clearer requirements before code, less rework from underspecified prompts, traceable handoffs between agents, and documentation that stays useful when you re-sync after code changes.
-
----
-
-## Core Concepts
-
-- **Persona-driven development:** Each workflow is owned and documented by a clear AI agent persona with a single responsibility principle.
-- **Context artifacts:** All major actions, decisions, and documentation are stored as markdown artifacts, ensuring explainability and reproducibility.
-- **Quality gates:** Required artifact headings, optional `aamad validate`, and QA → security → deliver sequencing.
-- **Project configuration:** Optional `aamad.config.yml` for shared language, UI, testing, and security preferences across personas.
-- **Documentation sync:** After enhancing generated code, use `prompt-sync-docs` so `project-context/` stays aligned with the implementation.
-- **Parallelizable epics:** Big tasks are broken into epics, making development faster and more autonomous while retaining control over quality.
-- **Reusability:** Framework reusable for any project—simply drop in your PRD/SAD and let the agents execute.
-- **Open, transparent, and community-driven:** All patterns and artifacts are readable, auditable, and extendable.
+Market sizing and go-to-market are marked N/A in the PRD (internal capability, controlled beta).
 
 ---
 
-## AAMAD phases at a glance
+## Key features
 
-AAMAD organizes work into three phases: Define, Build, and Deliver, each with clear artifacts, personas, and rules to keep development auditable and reusable. 
-The flow begins by defining context and templates, proceeds through multi‑agent build execution, and finishes with operational delivery.
+MVP scope (P0) from PRD §4 Functional Requirements. One line per feature.
 
-```mermaid
-flowchart LR
-  %% AAMAD phases overview
-  subgraph P1[DEFINE]
-    D1H[ PERSONA ]:::hdr --> D1L["• Product Manager<br/>(@product-mgr)"]:::list
-    D2H[TEMPLATES]:::hdr --> D2L["• System Description<br/>• MRD optional<br/>• PRD / stories"]:::list
-  end
+- **F1 — Welcome & Qualification.** Greets the customer, captures role, primary use case, and target timeline into a persisted customer profile; asks targeted clarifications (N=2 max) when confidence is low. *(PRD §4 F1)*
+- **F2 — Personalized Onboarding Plan.** Generates a first-week plan with 3–5 milestones (each ≤ 2h) from the qualified profile via `Task.context` — no re-asking. *(PRD §4 F2)*
+- **F3 — First-Use In-App Support.** Answers in-context product questions with grounded KB citations; refuses and escalates when no source clears the grounding threshold — never fabricates. *(PRD §4 F3)*
+- **F4 — Escalation with Context.** Hands off to a human after two failed attempts with a full context package (profile + transcript + what was tried), including a structured `ambiguity_report` when relevant. *(PRD §4 F4)*
+- **F5 — Sponsor Brief.** On-request one-page value/ROI summary for the business sponsor; uses documented defaults labeled "based on standard assumptions" when qualify inputs are missing. *(PRD §4 F5)*
+- **F6 — Error Handling for Ambiguous Work Requirements (cross-cutting).** Contract for ambiguity: ask targeted clarifications with up to 3 concrete options, cap at N=2 attempts, take a deterministic fallback (documented defaults or escalation with full `ambiguity_report`), never fabricate, enforce via CrewAI `Task.guardrail`, and log every ambiguity event as structured JSON. *(PRD §4 F6)*
 
-  subgraph P2[BUILD]
-    B1H[AGENTS]:::hdr --> B1L["• Project Mgr<br/>• System Architect<br/>• Frontend / Backend<br/>• Integration / QA<br/>• Security Eng"]:::list
-    B2H[RULES]:::hdr --> B2L["• core<br/>• development‑workflow<br/>• runtime adapter (crewai, claude-agent-sdk, or cursor-sdk)"]:::list
-  end
-
-  subgraph P3[DELIVER]
-    L1H[AGENTS]:::hdr --> L1L["• DevOps Eng"]:::list
-    L2H[RULES]:::hdr --> L2L["• delivery‑workflow<br/>(deploy, CI, user guide)"]:::list
-  end
-
-  P1 --> P2 --> P3
-
-  classDef hdr fill:#111,stroke:#555,color:#fff;
-  classDef list fill:#222,stroke:#555,color:#fff;
-``` 
-
-- **Phase 1 (Define):** Product Manager persona (`@product-mgr`) conducts structured elicitation (recommended), optional MRD for commercial products, and PRD/user stories to standardize project scoping.
-
-- **Phase 2 (Build):** Multi‑agent execution by Project Manager, System Architect, Frontend Engineer, Backend Engineer, Integration Engineer, QA Engineer (unit + integration stages), and (recommended) Security Engineer, governed by core/development-workflow rules and the selected runtime adapter rule.
-
-- **Phase 3 (Deliver):** DevOps Engineer (`@devops.eng`) packages the validated MVP using the `delivery-workflow` rule; artifacts include `project-context/3.deliver/deploy.md` and optionally `user-guide.md`.
+Enhanced (P1) and Future (P2) items — proactive confusion detection, guided setup wizard, multilingual beyond EN/PT-BR, churn-risk prediction, dedicated intent classifier, active learning — are documented in PRD §4 as deferred.
 
 ---
 
-## Installation
+## Application architecture overview
 
-Install AAMAD from PyPI and initialize the framework for your IDE:
+The crew is a **sequential CrewAI process** with a triage branch, where `welcome_agent` runs first and routes downstream via explicit `Task.context` chaining. `escalation_agent` is invoked from the support task on failure/exhaustion (PRD §3).
 
-```bash
-pip install aamad
-# or
-uv pip install aamad
-```
+The 5 agents and their roles (PRD §3, Core Agent Definitions table):
 
-### Multi-IDE support
+| # | Agent | Role | Goal |
+|---|-------|------|------|
+| 1 | `welcome_agent` | Onboarding Greeter & Qualifier | Identify who the customer is and route them to the right track |
+| 2 | `sponsor_brief_agent` | Business Sponsor Liaison | Give the sponsor a short value/ROI summary and expected timeline |
+| 3 | `onboarding_plan_agent` | Onboarding Planner | Produce a personalized first-week plan with concrete daily milestones |
+| 4 | `first_use_support_agent` | First-Use Guide | Answer product questions in-app during first use and unblock setup |
+| 5 | `escalation_agent` | Escalation Coordinator | Decide when a human is needed and hand off with complete context |
 
-AAMAD supports **Cursor**, **Claude Code**, and **VS Code + GitHub Copilot**. Choose your IDE with the `--ide` flag:
+**Shared context:** a customer profile object (role, goal, use case, timeline, `ambiguity_flags[]`) produced by `welcome_agent` and passed as `Task.context` to every downstream agent — no re-asking, no shared mutable state (PRD §3, §4 F6/AC8).
 
-```bash
-aamad init --ide cursor        # Default: Cursor
-aamad init --ide claude-code  # Claude Code
-aamad init --ide vscode       # VS Code + GitHub Copilot
-```
+**Runtime posture (MVP, per `adapter-crewai` rules):**
 
-#### Framework feature implementation by IDE
+- `process=sequential`, `memory=false` at crew level for reproducibility.
+- Agent/task definitions externalized to `config/agents.yaml` and `config/tasks.yaml`; wired by `crew.py`.
+- `allow_delegation=false` by default; only `welcome_agent` and `first_use_support_agent` currently declare `allow_delegation=true` (pending SAD confirmation).
+- `max_iter` per agent within the ≤ 12 MVP baseline; `max_retry_limit=2`; `max_rpm` set at crew level.
 
-| Feature | Cursor | Claude Code | VS Code + Copilot |
-| :------ | :----- | :---------- | :---------------- |
-| **Rules / instructions** | `.cursor/rules/*.mdc` with `alwaysApply: true` | `.claude/CLAUDE.md` + `.claude/rules/*.md` | `.github/instructions/*.instructions.md` |
-| **Rule format** | `.mdc` (YAML frontmatter + markdown body) | `.md` (plain markdown) | `.instructions.md` (`applyTo`, `name`, `description`) |
-| **Glob-based scoping** | ✅ `globs:` in frontmatter | ❌ Not supported (all rules loaded) | ✅ `applyTo:` in frontmatter |
-| **Agent definitions** | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.github/agents/*.agent.md` |
-| **Agent invocation** | `@agent-name` in chat | Delegation via `description`; explicit request | Agent dropdown; `@agent-name`; handoff buttons |
-| **Tool enforcement** | Instructions-based | ✅ Hard allowlist/denylist | ✅ Tool allowlist in frontmatter |
-| **Phase 1 prompt** | `.cursor/prompts/prompt-phase-1` | `.claude/commands/phase-1-define.md` (slash command) | `.github/prompts/phase-1-define.prompt.md` |
-| **Templates** | `.cursor/templates/` (shared) | `.cursor/templates/` (shared) | `.cursor/templates/` (shared) |
-| **Project context** | `project-context/` (shared) | `project-context/` (shared) | `project-context/` (shared) |
-| **Bridge file** | `AGENTS.md` (root) | `AGENTS.md` (root) | `AGENTS.md` (root) |
+> **Important:** The complete solution architecture — component diagram, data model, deployment topology, tool contracts, memory decisions, and delegation boundaries — will be authored by **`@system.arch`** in `project-context/1.define/sad.md`. That artifact does **not yet exist**. Details in this section reflect PRD intent only and are subject to SAD confirmation.
 
 ---
 
-### Cursor
+## Getting started
 
-**Install and initialize:**
+> **Honest placeholder.** The target runtime is `crewai`, but **no application code has been written yet**. This section describes the *expected* setup based on PRD §3 and `.claude/rules/adapter-crewai.md`. Concrete commands, dependency pins, and entrypoints will be provided by **`@backend.eng`** during Phase 2 Build (`project-context/2.build/setup.md` and `backend.md`).
 
-```bash
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install aamad
-aamad init --ide cursor --dest .
+### Expected prerequisites (per adapter-crewai)
+
+- **Python** (LTS version to be pinned by `@backend.eng` in `setup.md`).
+- **CrewAI** (`pip install crewai` — exact version to be pinned during Build).
+- LLM provider credentials — the specific provider is an [open question](#open-questions) (see PRD Open Question #1). At minimum, expect an API key such as `ANTHROPIC_API_KEY` or the equivalent for the resolved provider, plus any gateway/base URL settings your organization uses.
+- Access to the integration surfaces named in PRD §3: a customer/CRM read API, a KB search endpoint, a ticketing API, and a managed vector store. Endpoints and credentials **TBD by `@integration.eng`**.
+
+### Expected environment variables
+
+To be finalized in `.env.example` published by `@backend.eng` / `@integration.eng`. At minimum (per PRD §5 Security and `adapter-crewai` rules), secrets must be loaded from env vars and never embedded in artifacts:
+
+- `<LLM_PROVIDER_API_KEY>` — e.g. `ANTHROPIC_API_KEY` (pending Open Question #1).
+- `CRM_API_TOKEN` — service token for CRM reads.
+- `KB_SEARCH_API_KEY` — KB / vector store credentials.
+- `TICKETING_API_TOKEN` — ticket creation credentials.
+- `DATABASE_URL` — managed Postgres for customer profile, session, and message history.
+- `CREWAI_STORAGE_DIR` — only if memory is enabled per SAD justification; must be project-scoped.
+
+### Expected runtime layout (per adapter-crewai)
+
+```
+<generated-app>/
+├── config/
+│   ├── agents.yaml      # 5-agent definitions (welcome, sponsor_brief, plan, first_use, escalation)
+│   └── tasks.yaml       # sequential task graph with Task.context chaining
+├── crew.py              # runtime entrypoint that wires YAML into a Crew and calls kickoff()
+├── tools/               # tool bindings (crm_lookup, docs_search, kb_vector_search, ticket_api, ...)
+└── .env.example         # required env var names (no values)
 ```
 
-Or with uv:
+### Expected run command
 
-```bash
-uv venv
-uv pip install aamad
-uv run aamad init --ide cursor --dest .
-```
+**Not yet defined.** The concrete kickoff command (e.g. `python -m <package>.crew` or `crewai run`) will be documented by `@backend.eng` in `project-context/2.build/backend.md` and by `@project.mgr` in `setup.md`.
 
-**Folder structure after init:**
-
-```
-your-project/
-├── .cursor/
-│   ├── agents/          # Persona definitions (@product-mgr, @backend.eng, etc.)
-│   ├── prompts/         # Phase-specific prompts (e.g. prompt-phase-1)
-│   ├── rules/           # Always-on rules (*.mdc)
-│   └── templates/      # PRD, SAD, MR templates
-├── project-context/
-│   ├── 1.define/        # MRD, PRD, SAD outputs
-│   ├── 2.build/         # setup.md, frontend.md, backend.md, etc.
-│   └── 3.deliver/       # deploy runbook and configs
-├── AGENTS.md            # Bridge file (IDE discoverability)
-├── CHECKLIST.md
-└── README.md
-```
+Until then, no runnable entrypoint exists in this repository.
 
 ---
 
-### Claude Code
+## Project structure
 
-**Install and initialize:**
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install aamad
-aamad init --ide claude-code --dest .
-```
-
-Or with uv:
-
-```bash
-uv venv
-uv pip install aamad
-uv run aamad init --ide claude-code --dest .
-```
-
-**Folder structure after init:**
+Actual layout of this repository (verified via `Glob` on 2026-08-23). Items marked *planned* do not exist yet and will be authored by the persona listed in [Next steps](#next-steps-for-contributors).
 
 ```
-your-project/
+myproject/
 ├── .claude/
-│   ├── CLAUDE.md        # Rules summary + cross-references
-│   ├── agents/          # Persona definitions (Claude Code format)
-│   ├── commands/        # Slash commands (e.g. phase-1-define)
-│   ├── rules/           # Individual rule files (*.md)
-│   └── settings.json    # Permissions, AAMAD_TARGET_RUNTIME env
+│   ├── CLAUDE.md                 # Rules summary + cross-references
+│   ├── agents/                   # Persona definitions (product-mgr, system-arch, backend-eng, ...)
+│   ├── commands/                 # Slash commands (phase-1-define, sync-docs)
+│   ├── rules/                    # AAMAD core + workflow + adapter rules
+│   └── settings.json             # Permissions, AAMAD_TARGET_RUNTIME env (if set)
 ├── .cursor/
-│   └── templates/       # PRD, SAD, MR templates (shared)
+│   └── templates/                # PRD, SAD, SFS, MRD, user-guide, system-description, user-story templates
 ├── project-context/
 │   ├── 1.define/
+│   │   ├── prd.md                # EXISTS — Product Requirements Document (PRD)
+│   │   └── sad.md                # PLANNED — Solution Architecture Document (@system.arch)
 │   ├── 2.build/
+│   │   ├── setup.md              # PLANNED — Environment scaffolding (@project.mgr)
+│   │   ├── frontend.md           # PLANNED — Chat surface (@frontend.eng)
+│   │   ├── backend.md            # PLANNED — Crew + tools (@backend.eng)
+│   │   ├── integration.md        # PLANNED — CRM/KB/ticket wiring (@integration.eng)
+│   │   ├── qa.md                 # PLANNED — Unit + integration + smoke (@qa.eng)
+│   │   └── security.md           # PLANNED — Pre-deliver review (@security.eng)
 │   └── 3.deliver/
-├── AGENTS.md
-├── CHECKLIST.md
-└── README.md
+│       ├── deploy.md             # PLANNED — Deploy config + runbook (@devops.eng)
+│       └── user-guide.md         # PLANNED — User documentation (@devops.eng)
+├── aamad.config.example.yml      # Runtime target, security/testing/docs preferences
+├── AGENTS.md                     # IDE-agnostic bridge file
+├── CHECKLIST.md                  # Define → Build → Deliver checklist
+└── README.md                     # This file
 ```
 
----
-
-### VS Code + GitHub Copilot
-
-**Install and initialize:**
-
-```bash
-pip install aamad
-aamad init --ide vscode --dest .
-```
-
-Or with uv:
-
-```bash
-uv pip install aamad
-uv run aamad init --ide vscode --dest .
-```
-
-**Folder structure after init:**
-
-```
-your-project/
-├── .github/
-│   ├── instructions/   # Copilot instructions (*.instructions.md)
-│   ├── agents/         # Custom agents (*.agent.md) with optional handoffs
-│   └── prompts/        # Phase 1 prompt (phase-1-define.prompt.md)
-├── .vscode/
-│   └── settings.json   # chat.instructionsFilesLocations, chat.agentFilesLocations
-├── .cursor/
-│   └── templates/      # PRD, SAD, MR templates (shared)
-├── project-context/
-│   ├── 1.define/
-│   ├── 2.build/
-│   └── 3.deliver/
-├── AGENTS.md
-├── CHECKLIST.md
-└── README.md
-```
-
-**Required extensions:** GitHub Copilot, GitHub Copilot Chat. Recommended: Python (ms-python), YAML (redhat).
+No application code (`config/agents.yaml`, `crew.py`, tools, tests) exists yet. The `project-context/2.build/` and `project-context/3.deliver/` directories currently contain only `.gitkeep` placeholders.
 
 ---
 
-### Using AAMAD in your IDE
+## Next steps for contributors
 
-How you interact with AAMAD depends on your IDE. The framework produces the same artifacts (`project-context/`, templates, Phase 1 prompt); only rules and agent scaffolding differ.
+Follows the AAMAD workflow defined in [`.claude/rules/epics-index.md`](.claude/rules/epics-index.md) and [`.claude/rules/development-workflow.md`](.claude/rules/development-workflow.md). Each persona works in a **fresh context**, reads its declared inputs (PRD/SAD/prior artifacts), and writes only its declared output.
 
-#### Workflow and context (per IDE)
+| Order | Persona | Invocation | Output artifact | Status |
+|-------|---------|------------|-----------------|--------|
+| 1 | `@system.arch` | `*create-sad` | `project-context/1.define/sad.md` | Next up |
+| 2 | `@project.mgr` | `*setup-project` | `project-context/2.build/setup.md` | Pending SAD |
+| 3 | `@backend.eng` | `*develop-be` | `project-context/2.build/backend.md` | Pending SAD + setup |
+| 4 | `@frontend.eng` | `*develop-fe` | `project-context/2.build/frontend.md` | Pending SAD + setup |
+| 5 | `@integration.eng` | `*integrate-api` | `project-context/2.build/integration.md` | Pending backend + frontend |
+| 6 | `@qa.eng` | `*qa` | `project-context/2.build/qa.md` | Pending integration |
+| 7 | `@security.eng` | `*assess-security` | `project-context/2.build/security.md` | Pending QA (required — `security.require_security_assessment: true`) |
+| 8 | `@devops.eng` | `*prepare-release` / `*document-deploy` / `*document-user-guide` | `project-context/3.deliver/deploy.md`, `user-guide.md` | Pending security |
 
-| What you do | Cursor | Claude Code | VS Code + Copilot |
-| :---------- | :----- | :---------- | :---------------- |
-| **Start a fresh context** (e.g. new module) | `Cmd+Shift+P` → **New Chat** | `/clear` or start a new session | Start a new chat session |
-| **Invoke a persona** | Type `@backend.eng` (or other agent) in chat | Ask to use the subagent by name, or refer to its description | Pick the agent from the dropdown, or use `@agent-name` |
-| **Reference a file** | `@path/to/file` in chat | `@path/to/file` in the prompt | `#file:path/to/file` or drag-and-drop the file |
-| **Phase transitions** (Define → Build → Deliver) | Switch persona manually in chat | Use subagent chaining or explicit instructions | Use **handoff** buttons in the chat UI (when configured) |
-
-#### Capability comparison
-
-| Capability | Cursor | Claude Code | VS Code + Copilot |
-| :--------- | :----- | :---------- | :---------------- |
-| **AAMAD support** | Native (default) | Via `aamad init --ide claude-code` | Via `aamad init --ide vscode` |
-| **Glob-based rule scoping** | Yes | No (all rules loaded) | Yes (`applyTo:` in instructions) |
-| **Tool enforcement** | Instructions only | Hard allowlist/denylist | Tool allowlist in agent frontmatter |
-| **Agent handoffs** | Manual | Manual or subagent chaining | Native UI buttons (Define → Build → Deliver) |
-| **Parallel work** | Multiple chat tabs | Subagents / Agent Teams | Subagents |
-| **Model choice** | Multi-model | Claude models | Multi-model (GPT, Claude, Gemini, etc.) |
-| **Best for** | AAMAD as designed | CLI-first, solo use | Teams, enterprise, model diversity |
-
-#### What is the same in all IDEs
-
-These are **IDE-agnostic** — no change when you switch:
-
-- **`project-context/`** — Directory layout and all Phase 1/2/3 outputs (MRD, PRD, SAD, setup.md, frontend.md, backend.md, integration.md, qa.md).
-- **Templates** — PRD, SAD, MR templates (in `.cursor/templates/`; shared across IDEs).
-- **Phase 1 prompt** — Usable in any AI chat; same content in Cursor prompts, Claude Code commands, or VS Code prompts.
-- **Crew logic and artifacts** — The same persona/rules/templates methodology regardless of IDE.
-- **Git and dependency setup** — Same repo and `pyproject.toml` workflow.
-
-What **does** change per IDE: where rules and agents live (`.cursor/`, `.claude/`, or `.github/`) and how you invoke personas and reference files (see table above).
+**Immediate next action:** invoke `@system.arch` with `*create-sad` to produce the Solution Architecture Document. The SAD must resolve PRD Open Questions #1 (LLM provider/model tier), #6 (context window strategy), #8 (memory posture), #9 (delegation boundaries), and #10 (ambiguity confidence signal) — see [Open questions](#open-questions).
 
 ---
 
-**CLI flags:**
+## Open questions
 
-- `--dest PATH` — Output directory (default: current directory)
-- `--ide {cursor,claude-code,vscode}` — Target IDE (default: cursor)
-- `--overwrite` — Allow replacing existing files
-- `--dry-run` — Preview what would be written
+Carried over from PRD Open Questions (§Open Questions). Contributors should not fabricate answers; each must be resolved by the persona or stakeholder indicated.
 
-Inspect bundle contents: `aamad bundle-info --verbose` or `aamad bundle-info --ide claude-code`. For `--ide vscode`, artifacts are generated from the Cursor bundle (no separate bundle).
+1. LLM provider and model tier — cost vs latency vs grounding quality? *(→ `@system.arch`)*
+2. Accepted cost ceiling per onboarding session? *(→ stakeholder)*
+3. Real baselines for time-to-value, setup completion, and ticket mix? *(→ stakeholder / analytics)*
+4. Escalation coverage — 24/5 or 24/7, and SLA? *(→ Customer Success)*
+5. Does the sponsor brief require human review before reaching the customer? *(→ stakeholder)*
+6. Session context window per agent turn — full transcript or rolling? *(→ `@system.arch`)*
+7. Is proactive confusion detection (P1) in or out for the first release? *(→ PM)*
+8. Should any agent memory be enabled at MVP? *(→ `@system.arch`)*
+9. Are `welcome_agent` and `first_use_support_agent` the only agents needing `allow_delegation=true`? *(→ `@system.arch`)*
+10. Which confidence signal backs the ambiguity thresholds (logprobs, self-critique, retrieval delta, hybrid)? *(→ `@system.arch`)*
+11. N=2 clarification cap — global per instance or per agent? *(→ `@system.arch` / stakeholder)*
+12. Where does the curated `template_library` of ambiguity fallback defaults live, and who owns it? *(→ stakeholder)*
+13. Review workflow / SLA for tickets escalated with `ambiguity_report`? *(→ Customer Success)*
+14. Conflicting-signal cases — is the conflict surfaced to the customer or only in the ticket payload? *(→ UX / stakeholder)*
 
----
+Additional README-specific TBDs pending Build-phase authorship:
 
-## Repository Structure
-
-    aamad/
-    ├─ .cursor/
-    │   ├─ agents/       # Agent persona definitions
-    │   ├─ prompts/      # Phase-specific prompts
-    │   ├─ rules/        # Architecture, workflow, epics rules
-    │   └─ templates/    # PRD, SAD, MR templates
-    ├─ project-context/
-    │   ├─ 1.define/     # PRD, SAD, research reports
-    │   ├─ 2.build/      # Setup, frontend, backend, integration, QA
-    │   └─ 3.deliver/    # deploy runbook and configs
-    ├─ docs/
-    ├─ CHECKLIST.md
-    └─ README.md
-
-**Framework artifacts** in `.cursor/` are the source for both Cursor and Claude Code bundles.  
-**Project-context** is IDE-agnostic and shared across all IDEs.
+- Concrete Python version, CrewAI version, and dependency pins *(→ `@backend.eng` in `setup.md` / `backend.md`)*.
+- Concrete `.env.example` file contents *(→ `@backend.eng` / `@integration.eng`)*.
+- Runnable kickoff command and local dev workflow *(→ `@backend.eng` in `backend.md`)*.
+- Hosting target, ports, and health-check endpoints *(→ `@devops.eng` in `deploy.md`)*.
 
 ---
 
-## Runtime adapters
+## Sources
 
-Use `AAMAD_TARGET_RUNTIME` to choose the runtime target for the generated multi-agent application in Phase 2:
-
-| Runtime | Status | Best fit |
-| :------ | :----- | :------- |
-| `crewai` | Default | Declarative task orchestration with YAML-first runtime configuration |
-| `claude-agent-sdk` | Supported | Agentic runtime harness with hooks, MCP, and session control |
-| `cursor-sdk` | Supported | TypeScript-first Cursor runtime integration with explicit tool/runtime contracts |
-
----
-
-## How to Use the Framework
-
-1. **Install** (recommended): `pip install aamad` then `aamad init --ide <cursor|claude-code|vscode>`
-2. **Optional project config:** copy `aamad.config.example.yml` → `aamad.config.yml` and set language, UI, testing, and security preferences.
-3. **Select runtime target** for Phase 2 (for example `AAMAD_TARGET_RUNTIME=crewai`, `AAMAD_TARGET_RUNTIME=claude-agent-sdk`, or `AAMAD_TARGET_RUNTIME=cursor-sdk`).
-4. Confirm your IDE has the full agent, prompt, and rule set.
-5. Follow `CHECKLIST.md` for the Define → Build → Deliver workflow (start Phase 1 with `*elicit-requirements` when the use case is specialized).
-6. Each agent persona executes its epic(s), producing markdown artifacts and code.
-7. Run `aamad validate --phase define|build|deliver` at phase gates to check required artifacts and Audit headings.
-8. Review, test, and launch the MVP. After code changes that drift from docs, use `.cursor/prompts/prompt-sync-docs` (Claude Code: `/sync-docs`) to resynchronize `project-context/`.
+- `project-context/1.define/prd.md` — Product Requirements Document (§1 Executive Summary, §3 Technical Requirements, §4 Functional Requirements F1–F6, §5 Non-Functional Requirements, §7 Success Metrics, §8 Implementation Strategy, Assumptions, Open Questions, Audit).
+- `aamad.config.example.yml` — resolved runtime target (`crewai`) and security assessment requirement.
+- `.claude/rules/aamad-core.md` — persona contract, artifact rules, security policy.
+- `.claude/rules/adapter-crewai.md` — CrewAI runtime setup, mapping, execution, tools, logging, quality gates.
+- `.claude/rules/epics-index.md` — persona → epic → artifact mapping used in [Next steps](#next-steps-for-contributors).
+- `.claude/rules/development-workflow.md` — modular Build workflow guidance.
+- Repository file listing via `Glob` on 2026-08-23 (verifies [Project structure](#project-structure)).
 
 ---
 
-## Phase 1: Define Stage (Product Manager)
+## Assumptions
 
-The Product Manager persona (`@product-mgr`) conducts discovery and context setup to standardize project scoping:
-
-- **Elicitation (recommended):** Structured questionnaire → `system-description.md` via `*elicit-requirements`
-- **Market Research (optional):** MRD using `.cursor/templates/mrd-template.md` for commercial products; skip for internal/personal tools
-- **Requirements:** PRD using `.cursor/templates/prd-template.md`
-- **User stories:** MVP stories for architecture and QA traceability
-- **Project config:** Optional `aamad.config.yml` for language, UI, testing, and security defaults
-- **Validation:** Run `aamad validate --phase define` when artifacts exist
-
-Phase 1 outputs are stored in `project-context/1.define/` and provide the foundation for all subsequent development phases.
+- **Runtime resolution:** `AAMAD_TARGET_RUNTIME` env var is unset at authoring time; runtime resolved from `aamad.config.example.yml` `runtime.target: crewai`. Operator override takes precedence per `adapter-registry` rules.
+- **Baseline metrics** in [Problem statement](#problem-statement-and-value-proposition) are illustrative placeholders inherited from the PRD, pending real product analytics (PRD Assumptions).
+- **No application code exists yet.** All runtime instructions in [Getting started](#getting-started) are honest placeholders that will be replaced by Phase 2 Build artifacts.
+- **MRD skipped** deliberately (internal capstone MVP, no commercial market case).
+- **Architecture details** in [Application architecture overview](#application-architecture-overview) reflect PRD intent only and are subject to confirmation in `sad.md` by `@system.arch`.
+- **Ambiguity thresholds** (N=2 clarifications, confidence < 0.7 for qualify, < 0.6 for grounding, retrieval delta ≤ 0.1) are MVP defaults per PRD Assumptions — tunable, not contractual.
 
 ---
 
-## Phase 2: Build Stage (Multi-Agent)
+## Audit
 
-Each role is embodied by an agent persona, defined in `.cursor/agents/` (Cursor), `.claude/agents/` (Claude Code), or `.github/agents/` (VS Code).  
-Before implementation, set `AAMAD_TARGET_RUNTIME` to the target backend runtime (`crewai` default, `claude-agent-sdk` supported, `cursor-sdk` supported).
-Phase 2 is executed by running each epic in sequence after completing Phase 1:
-
-- **Architecture:** Generate solution architecture document (`sad.md`)
-- **Setup:** Scaffold environment, install dependencies, and document (`setup.md`)
-- **Frontend:** Build UI + placeholders, document (`frontend.md`)
-- **Backend:** Implement backend for the selected runtime, document (`backend.md`)
-- **Integration:** Wire up chat flow, verify, document (`integration.md`)
-- **Quality Assurance:** Run `*test-unit` and `*test-integration`, then smoke/acceptance (`*qa`); map tests to acceptance-criteria IDs when present; log in `qa.md`
-- **Security (recommended):** `@security.eng` → `security.md` before Deliver (required when `aamad.config.yml` sets `security.require_security_assessment: true`)
-
-Artifacts are versioned and stored in `project-context/2.build` for traceability.
-
----
-
-## Phase 3: Deliver Stage (DevOps)
-
-After QA (and preferably security), invoke `@devops.eng`:
-
-- **Release readiness:** Confirm `qa.md` (and note `security.md` status)
-- **Deploy / CI:** Minimal deploy and pipeline config aligned with SAD and `AAMAD_TARGET_RUNTIME`
-- **Runbook:** `project-context/3.deliver/deploy.md` (hosting, env matrix, access, rollback)
-- **User docs:** `*document-user-guide` → `project-context/3.deliver/user-guide.md`
-- **Validate:** `aamad validate --phase deliver`
-
----
-
-## Contributing
-
-Contributions are welcome!  
-- Open an issue for bugs/feature ideas/improvements.
-- Submit pull requests with extended templates, new agent personas, or bug fixes.
-- Help evolve the knowledge base and documentation for greater adoption.
-- When modifying `.cursor/` or `project-context/`, run `python scripts/update_bundle.py` to refresh both Cursor and Claude Code bundles before publishing.
-
----
-
-## License
-
-Licensed under Apache License 2.0.
-
-> Why Apache-2.0
->    Explicit patent grant and patent retaliation protect maintainers and users from patent disputes, which is valuable for AI/ML methods, agent protocols, and orchestration logic.
->    Permissive terms enable proprietary or closed-source usage while requiring attribution and change notices, which encourages integration into enterprise stacks.
->    Compared to MIT/BSD, Apache-2.0 clarifies modification notices and patent rights, reducing legal ambiguity for contributors and adopters.
-
----
-
-> For detailed step-by-step Phase 2 execution, see [CHECKLIST.md](CHECKLIST.md).  
-> For advanced reference and prompt engineering, see `.cursor/templates/` and `.cursor/rules/`.
+- **Timestamp:** 2026-08-23
+- **Persona id:** `product-mgr`
+- **Action:** `*create-readme`
+- **Resolved AAMAD_TARGET_RUNTIME:** crewai — source: aamad.config.example.yml (runtime.target); env var not set; no aamad.config.yml present
+- **Adapter rules applied:** `.claude/rules/adapter-crewai.md`, `.claude/rules/aamad-core.md`, `.claude/rules/epics-index.md`, `.claude/rules/development-workflow.md`
+- **Inputs read:** `project-context/1.define/prd.md`, `aamad.config.example.yml`, prior `README.md`, repository file listing via `Glob`
+- **Output written:** `README.md` (project-level, replaces prior framework-level README)
+- **Prompt Trace:** omitted — deterministic template-driven authoring off the existing PRD as source-of-truth; low-risk Define-adjacent artifact per `aamad-core` policy. Prompt Trace will be captured for production-facing Build/Deliver artifacts.
