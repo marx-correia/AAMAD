@@ -1,0 +1,6 @@
+/* Global reset — kept minimal. See src/App.css for component styles. */
+html,
+body,
+#root {
+  height: 100%;
+}
